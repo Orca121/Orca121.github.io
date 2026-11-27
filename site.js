@@ -4,7 +4,7 @@
     "zh-CN": {
       lang: "zh-CN",
       label: "简体中文",
-      intro: "这段简介可以替换。",
+      intro: "活着，爱着，赴宴去。",
       description: "Patrick Wong 的个人主页。",
       switcher: "语言",
       creditPrefix: "照片："
@@ -12,7 +12,7 @@
     "zh-HK": {
       lang: "zh-HK",
       label: "繁體中文",
-      intro: "這段簡介可以替換。",
+      intro: "活著，愛著，赴宴去。",
       description: "Patrick Wong 的個人主頁。",
       switcher: "語言",
       creditPrefix: "相片："
@@ -20,7 +20,7 @@
     en: {
       lang: "en",
       label: "English",
-      intro: "This introduction can be replaced.",
+      intro: "Living, Loving, Party Going.",
       description: "Personal site of Patrick Wong.",
       switcher: "Language",
       creditPrefix: "Photo: "
