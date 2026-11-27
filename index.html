@@ -15,7 +15,11 @@
   </head>
   <body>
     <div class="page">
-      <header class="site-header">
+      <main>
+        <h1>Patrick Wong</h1>
+        <p class="intro" data-i18n="intro">这段简介可以替换。</p>
+      </main>
+      <footer class="colophon">
         <div class="lang">
           <button
             type="button"
@@ -26,9 +30,7 @@
             aria-label="语言"
           >
             <span class="lang-value">简体中文</span>
-            <svg class="chevron" viewBox="0 0 12 12" aria-hidden="true">
-              <path d="M2.2 4.2 6 8l3.8-3.8" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="square" />
-            </svg>
+            <span class="caret" aria-hidden="true"></span>
           </button>
           <ul id="lang-list" class="lang-list" role="listbox" aria-label="语言" hidden>
             <li id="opt-zh-CN" role="option" data-lang="zh-CN" lang="zh-CN" aria-selected="true">简体中文</li>
@@ -36,17 +38,7 @@
             <li id="opt-en" role="option" data-lang="en" lang="en" aria-selected="false">English</li>
           </ul>
         </div>
-      </header>
-      <main>
-        <svg class="orca" viewBox="0 0 220 86" aria-hidden="true">
-          <path class="body" d="M16 50c-1-10 8-18 22-19 15-1 27 3 34 9 3-16 12-30 22-33 6-2 11 4 10 13 0 11 3 18 9 20 30 2 62 8 84 16 9-8 22-16 32-18-7 9-12 16-9 20 7 2 14 9 12 16-9-3-18-8-25-8-26 9-64 16-104 13-24-2-46-7-64-14-11-5-24-7-33-5z"/>
-          <path class="patch" d="M32 54c18 9 48 13 80 11 18-1 34-5 46-9-20 7-46 9-72 7-20-1-38-5-54-9z"/>
-          <ellipse class="patch" cx="38" cy="41" rx="9" ry="5" transform="rotate(-20 38 41)"/>
-          <path class="body" d="M56 55c7 11 22 15 30 9-9-1-22-6-30-9z"/>
-        </svg>
-        <h1>Patrick Wong</h1>
-        <p class="intro" data-i18n="intro">这段简介可以替换。</p>
-      </main>
+      </footer>
     </div>
     <script src="site.js"></script>
   </body>

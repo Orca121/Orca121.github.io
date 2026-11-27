@@ -1,14 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 86">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <style>
-    .body { fill: #121212; }
-    .patch { fill: #f4f4f2; }
+    path { fill: #141414; }
     @media (prefers-color-scheme: dark) {
-      .body { fill: #f3f3f1; }
-      .patch { fill: #111110; }
+      path { fill: #f3f3f1; }
     }
   </style>
-  <path class="body" d="M16 50c-1-10 8-18 22-19 15-1 27 3 34 9 3-16 12-30 22-33 6-2 11 4 10 13 0 11 3 18 9 20 30 2 62 8 84 16 9-8 22-16 32-18-7 9-12 16-9 20 7 2 14 9 12 16-9-3-18-8-25-8-26 9-64 16-104 13-24-2-46-7-64-14-11-5-24-7-33-5z"/>
-  <path class="patch" d="M32 54c18 9 48 13 80 11 18-1 34-5 46-9-20 7-46 9-72 7-20-1-38-5-54-9z"/>
-  <ellipse class="patch" cx="38" cy="41" rx="9" ry="5" transform="rotate(-20 38 41)"/>
-  <path class="body" d="M56 55c7 11 22 15 30 9-9-1-22-6-30-9z"/>
+  <path d="M8.2 3.2h10.6c5 0 8.3 3 8.3 7.5 0 4.55-3.3 7.5-8.35 7.5h-6.4V28.8H8.2V3.2zm4.15 3.45v8.1h5.95c2.75 0 4.4-1.5 4.4-4.05s-1.65-4.05-4.4-4.05h-5.95z"/>
 </svg>
