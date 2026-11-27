@@ -6,7 +6,7 @@
     <title>Patrick Wong</title>
     <meta name="description" content="Patrick Wong 的个人主页。">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
     <meta property="og:title" content="Patrick Wong">
     <meta property="og:description" content="Patrick Wong">
     <meta property="og:type" content="website">
@@ -14,22 +14,12 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div class="ground" aria-hidden="true">
+      <div class="ground-photo"></div>
+      <div class="ground-photo"></div>
+    </div>
     <div class="page">
-      <main>
-        <h1>Patrick Wong</h1>
-        <p class="intro" data-i18n="intro">这段简介可以替换。</p>
-        <figure class="still">
-          <img
-            src="images/pittman-jumping.jpg"
-            width="2186"
-            height="1453"
-            alt="两头跃出水面的虎鲸"
-            data-i18n="photoAlt"
-          >
-        </figure>
-      </main>
-      <footer class="colophon">
-        <a class="credit" href="https://commons.wikimedia.org/wiki/File:Killerwhales_jumping.jpg" data-i18n="credit">照片：Robert Pittman / NOAA</a>
+      <header class="mast">
         <div class="lang">
           <button
             type="button"
@@ -48,6 +38,13 @@
             <li id="opt-en" role="option" data-lang="en" lang="en" aria-selected="false">English</li>
           </ul>
         </div>
+      </header>
+      <main>
+        <h1>Patrick Wong</h1>
+        <p class="intro" data-i18n="intro">这段简介可以替换。</p>
+      </main>
+      <footer class="colophon">
+        <a class="credit" href="https://commons.wikimedia.org/wiki/File:Killerwhales_jumping.jpg">照片：Robert Pittman / NOAA</a>
       </footer>
     </div>
     <script src="site.js"></script>

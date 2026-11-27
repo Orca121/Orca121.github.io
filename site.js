@@ -7,8 +7,7 @@
       intro: "这段简介可以替换。",
       description: "Patrick Wong 的个人主页。",
       switcher: "语言",
-      photoAlt: "两头跃出水面的虎鲸",
-      credit: "照片：Robert Pittman / NOAA"
+      creditPrefix: "照片："
     },
     "zh-HK": {
       lang: "zh-HK",
@@ -16,8 +15,7 @@
       intro: "這段簡介可以替換。",
       description: "Patrick Wong 的個人主頁。",
       switcher: "語言",
-      photoAlt: "兩頭躍出水面的虎鯨",
-      credit: "相片：Robert Pittman / NOAA"
+      creditPrefix: "相片："
     },
     en: {
       lang: "en",
@@ -25,8 +23,7 @@
       intro: "This introduction can be replaced.",
       description: "Personal site of Patrick Wong.",
       switcher: "Language",
-      photoAlt: "Two orcas leaping",
-      credit: "Photo: Robert Pittman / NOAA"
+      creditPrefix: "Photo: "
     }
   };
 
@@ -113,6 +110,7 @@
       options[j].setAttribute("aria-selected", selected ? "true" : "false");
     }
     button.setAttribute("aria-activedescendant", options[indexOf(text.lang)].id);
+    refreshCredit();
   }
 
   function remember(lang) {
@@ -206,5 +204,118 @@
     if (event.key === "Escape" && !list.hidden) closeList();
   });
 
+  var refreshCredit = function () {};
+
+  function initGround() {
+    var photos = [
+      {
+        file: "images/orca-pittman-jumping.jpg",
+        credit: "Robert Pittman / NOAA",
+        commons: "https://commons.wikimedia.org/wiki/File:Killerwhales_jumping.jpg"
+      },
+      {
+        file: "images/orca-noaa-pair.jpg",
+        credit: "NOAA Photo Library",
+        commons: "https://commons.wikimedia.org/wiki/File:Anim1102_-_Flickr_-_NOAA_Photo_Library.jpg"
+      },
+      {
+        file: "images/orca-dorsal.jpg",
+        credit: "Shannon Rankin / NOAA",
+        commons: "https://commons.wikimedia.org/wiki/File:Orcinus_orca_NOAA_Photo_Library.jpg"
+      },
+      {
+        file: "images/orca-shimada-surface.jpg",
+        credit: "Allen Shimada / NOAA",
+        commons: "https://commons.wikimedia.org/wiki/File:Anim1133_-_Flickr_-_NOAA_Photo_Library.jpg"
+      },
+      {
+        file: "images/orca-shimada-birds.jpg",
+        credit: "Allen Shimada / NOAA",
+        commons: "https://commons.wikimedia.org/wiki/File:Anim1125_-_Flickr_-_NOAA_Photo_Library.jpg"
+      },
+      {
+        file: "images/orca-shimada-wake.jpg",
+        credit: "Allen Shimada / NOAA",
+        commons: "https://commons.wikimedia.org/wiki/File:Anim1130_-_Flickr_-_NOAA_Photo_Library.jpg"
+      }
+    ];
+    var nodes = document.querySelectorAll(".ground-photo");
+    var credit = document.querySelector(".credit");
+    var index = Math.floor(Math.random() * photos.length);
+    var shown = 0;
+    var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var timer = 0;
+    var hold = 18000;
+
+    function paint(node, photo) {
+      node.style.backgroundImage = 'url("' + photo.file + '")';
+    }
+
+    function preload(file) {
+      var img = new Image();
+      img.decoding = "async";
+      img.src = file;
+    }
+
+    refreshCredit = function () {
+      var photo = photos[index];
+      var text = copy[document.documentElement.lang] || copy["zh-CN"];
+      credit.textContent = text.creditPrefix + photo.credit;
+      credit.setAttribute("href", photo.commons);
+    };
+
+    paint(nodes[0], photos[index]);
+    nodes[0].classList.add("is-on");
+    refreshCredit();
+    preload(photos[index].file);
+
+    var queue = [];
+    var cursor = 0;
+    for (var i = 1; i < photos.length; i += 1) queue.push(photos[(index + i) % photos.length].file);
+    function preloadNext() {
+      if (cursor >= queue.length) return;
+      preload(queue[cursor]);
+      cursor += 1;
+      if (cursor < queue.length) window.setTimeout(preloadNext, 240);
+    }
+    window.setTimeout(preloadNext, 160);
+
+    function advance() {
+      var next = (index + 1) % photos.length;
+      var incoming = shown === 0 ? 1 : 0;
+      var outgoing = shown;
+      paint(nodes[incoming], photos[next]);
+      nodes[incoming].style.zIndex = "2";
+      nodes[outgoing].style.zIndex = "1";
+      nodes[incoming].classList.add("is-on");
+      window.setTimeout(function () {
+        nodes[outgoing].classList.remove("is-on");
+        index = next;
+        shown = incoming;
+        refreshCredit();
+      }, 3400);
+    }
+
+    function arm() {
+      if (timer || motion.matches) return;
+      timer = window.setInterval(advance, hold);
+    }
+
+    function disarm() {
+      if (!timer) return;
+      window.clearInterval(timer);
+      timer = 0;
+    }
+
+    if (!motion.matches) arm();
+    if (motion.addEventListener) {
+      motion.addEventListener("change", function () {
+        if (motion.matches) disarm();
+        else arm();
+      });
+    }
+  }
+
   apply(preferredLanguage());
+  initGround();
 })();
