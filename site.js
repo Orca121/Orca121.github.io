@@ -6,21 +6,27 @@
       label: "简体中文",
       intro: "这段简介可以替换。",
       description: "Patrick Wong 的个人主页。",
-      switcher: "语言"
+      switcher: "语言",
+      photoAlt: "两头跃出水面的虎鲸",
+      credit: "照片：Robert Pittman / NOAA"
     },
     "zh-HK": {
       lang: "zh-HK",
       label: "繁體中文",
       intro: "這段簡介可以替換。",
       description: "Patrick Wong 的個人主頁。",
-      switcher: "語言"
+      switcher: "語言",
+      photoAlt: "兩頭躍出水面的虎鯨",
+      credit: "相片：Robert Pittman / NOAA"
     },
     en: {
       lang: "en",
       label: "English",
       intro: "This introduction can be replaced.",
       description: "Personal site of Patrick Wong.",
-      switcher: "Language"
+      switcher: "Language",
+      photoAlt: "Two orcas leaping",
+      credit: "Photo: Robert Pittman / NOAA"
     }
   };
 
@@ -94,7 +100,9 @@
     var nodes = document.querySelectorAll("[data-i18n]");
     for (var i = 0; i < nodes.length; i += 1) {
       var key = nodes[i].getAttribute("data-i18n");
-      if (text[key]) nodes[i].textContent = text[key];
+      if (!text[key]) continue;
+      if (nodes[i].tagName === "IMG") nodes[i].alt = text[key];
+      else nodes[i].textContent = text[key];
     }
 
     var description = document.querySelector('meta[name="description"]');
