@@ -1,0 +1,28 @@
+# Operating systems
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Local environment and logs
+.env
+.env.*
+*.log
+
+# Local tooling, if added later
+node_modules/
+.cache/
+dist/
