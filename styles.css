@@ -172,7 +172,7 @@ h1 {
   margin: 0;
   padding: 0;
   list-style: none;
-  background: var(--paper);
+  background: transparent;
   text-align: right;
 }
 
@@ -182,6 +182,7 @@ h1 {
 
 .lang-list [role="option"] {
   padding: 0.18rem 0.72rem 0.18rem 0;
+  background: transparent;
   color: var(--quiet);
   font-size: 0.75rem;
   line-height: 1.2;
@@ -190,8 +191,10 @@ h1 {
   white-space: nowrap;
 }
 
+.lang-list [role="option"]:hover,
 .lang-list [role="option"][aria-selected="true"],
 .lang-list [role="option"].is-active {
+  background: transparent;
   color: var(--ink);
 }
 
