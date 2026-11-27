@@ -75,7 +75,7 @@
       : [navigator.language || ""];
     for (var i = 0; i < listOfLanguages.length; i += 1) {
       var match = matchLanguage(listOfLanguages[i]);
-      if (match) return match;
+      if (match && match !== "en") return match;
     }
     return "zh-CN";
   }
