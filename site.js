@@ -3,21 +3,18 @@
   var copy = {
     "zh-CN": {
       lang: "zh-CN",
-      eyebrow: "个人主页",
       intro: "这段简介可以替换。",
       description: "Patrick Wong 的个人主页。",
       switcher: "语言"
     },
     "zh-HK": {
       lang: "zh-HK",
-      eyebrow: "個人主頁",
       intro: "這段簡介可以替換。",
       description: "Patrick Wong 的個人主頁。",
       switcher: "語言"
     },
     en: {
       lang: "en",
-      eyebrow: "Personal site",
       intro: "This introduction can be replaced.",
       description: "Personal site of Patrick Wong.",
       switcher: "Language"
