@@ -34,50 +34,14 @@
   var options = Array.prototype.slice.call(list.querySelectorAll("[role='option']"));
   var activeIndex = 0;
 
-  function matchLanguage(tag) {
-    var text = String(tag || "").toLowerCase().replace(/_/g, "-");
-    if (text === "en" || text.indexOf("en-") === 0) return "en";
-    if (
-      text === "zh-hk" ||
-      text.indexOf("zh-hk-") === 0 ||
-      text === "zh-hant-hk" ||
-      text.indexOf("zh-hant-hk-") === 0 ||
-      text === "yue" ||
-      text === "yue-hk" ||
-      text.indexOf("yue-hk-") === 0 ||
-      text === "yue-hant" ||
-      text.indexOf("yue-hant-") === 0
-    ) {
-      return "zh-HK";
-    }
-    if (
-      text === "zh" ||
-      text === "zh-cn" ||
-      text.indexOf("zh-cn-") === 0 ||
-      text === "zh-hans" ||
-      text.indexOf("zh-hans-") === 0
-    ) {
-      return "zh-CN";
-    }
-    return "";
-  }
-
   function preferredLanguage() {
     try {
       var saved = localStorage.getItem(KEY);
       if (copy[saved]) return saved;
     } catch (error) {
-      /* Storage can be blocked; fall through to the browser language. */
+      /* Storage can be blocked; use the default. */
     }
-
-    var listOfLanguages = navigator.languages && navigator.languages.length
-      ? navigator.languages
-      : [navigator.language || ""];
-    for (var i = 0; i < listOfLanguages.length; i += 1) {
-      var match = matchLanguage(listOfLanguages[i]);
-      if (match && match !== "en") return match;
-    }
-    return "zh-CN";
+    return "en";
   }
 
   function indexOf(lang) {
