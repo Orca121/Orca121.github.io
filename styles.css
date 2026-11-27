@@ -1,18 +1,16 @@
 :root {
-  --paper: #f6f1e7;
-  --ink: #221f1b;
-  --quiet: #5e584f;
-  --line: rgba(34, 31, 27, 0.16);
+  --paper: #f4f4f2;
+  --ink: #121212;
+  --quiet: #5a5a56;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Songti SC", "STSong", "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Noto Serif", serif;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #141311;
-    --ink: #f3efe6;
-    --quiet: #c2b8aa;
-    --line: rgba(243, 239, 230, 0.2);
+    --paper: #111110;
+    --ink: #f3f3f1;
+    --quiet: #a7a79f;
     color-scheme: dark;
   }
 }
@@ -33,110 +31,157 @@ body {
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.125rem;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 .page {
-  width: min(32.5rem, calc(100% - 3.25rem));
+  width: min(34rem, calc(100% - 3.5rem));
   min-height: 100dvh;
   margin-inline: auto;
-  padding: 1.85rem 0 3.5rem;
+  padding: 1.65rem 0 4rem;
   display: flex;
   flex-direction: column;
 }
 
 .site-header {
   display: flex;
+  justify-content: flex-end;
+}
+
+.lang {
+  position: relative;
+}
+
+.lang-button {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-}
-
-.mark {
-  display: block;
-  width: 2.15rem;
-  height: auto;
-  flex: none;
-}
-
-.langs {
-  display: flex;
-  align-items: baseline;
-  gap: 1.15rem;
-}
-
-.langs button {
-  appearance: none;
+  gap: 0.42rem;
   margin: 0;
-  padding: 0.15rem 0 0.2rem;
+  padding: 0.2rem 0 0.28rem;
   border: 0;
+  border-bottom: 1px solid var(--ink);
   background: none;
-  color: var(--quiet);
+  color: var(--ink);
   font: inherit;
   font-size: 0.95rem;
   line-height: 1;
-  letter-spacing: 0;
   cursor: pointer;
 }
 
-.langs button[aria-pressed="true"] {
-  color: var(--ink);
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.38em;
+.chevron {
+  width: 0.68rem;
+  height: 0.68rem;
+  display: block;
+  transition: transform 160ms ease;
 }
 
-.langs button:hover {
+.lang-button[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+.lang-list {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  z-index: 2;
+  min-width: 9.5rem;
+  margin: 0;
+  padding: 0.2rem 0;
+  list-style: none;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+}
+
+.lang-list[hidden] {
+  display: none;
+}
+
+.lang-list [role="option"] {
+  padding: 0.38rem 0.85rem;
+  color: var(--quiet);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.lang-list [role="option"][aria-selected="true"] {
   color: var(--ink);
+}
+
+.lang-list [role="option"].is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.lang-button:focus-visible,
+.lang-list [role="option"]:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
 }
 
 main {
-  padding-top: clamp(2.5rem, 7vh, 3.75rem);
+  padding-top: clamp(3.25rem, 10vh, 5.25rem);
+}
+
+.orca {
+  display: block;
+  width: 6.75rem;
+  height: auto;
+  margin: 0 0 1.35rem;
+  color: var(--ink);
+}
+
+.orca .body {
+  fill: currentColor;
+}
+
+.orca .patch {
+  fill: var(--paper);
 }
 
 h1 {
   margin: 0;
   font-weight: 520;
-  font-size: clamp(3.15rem, 7.4vw, 4.7rem);
-  letter-spacing: -0.028em;
+  font-size: clamp(3.15rem, 7.6vw, 4.75rem);
+  letter-spacing: -0.03em;
   line-height: 0.96;
 }
 
 .intro {
-  margin: 1.2rem 0 0;
-  max-width: 26rem;
+  margin: 1.15rem 0 0;
+  max-width: 28rem;
   color: var(--quiet);
   font-size: 1.125rem;
 }
 
-button:focus-visible {
-  outline: 1px solid var(--ink);
-  outline-offset: 4px;
-}
-
 @media (max-width: 640px) {
   .page {
-    width: min(32.5rem, calc(100% - 2.25rem));
-    padding-top: 1.35rem;
+    width: min(34rem, calc(100% - 2.25rem));
+    padding-top: 1.25rem;
   }
 
-  .mark {
-    width: 1.9rem;
-  }
-
-  .langs {
-    gap: 0.9rem;
-  }
-
-  .langs button {
+  .lang-button,
+  .lang-list [role="option"] {
     font-size: 0.9rem;
   }
 
   main {
-    padding-top: 2.65rem;
+    padding-top: 7.7rem;
+  }
+
+  .orca {
+    width: 5.6rem;
+    margin-bottom: 1.1rem;
   }
 
   .intro {
     font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
   }
 }
