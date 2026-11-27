@@ -71,6 +71,16 @@ body {
   }
 }
 
+body.is-reading .ground::after {
+  opacity: 0.62;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.is-reading .ground::after {
+    opacity: 0.8;
+  }
+}
+
 .page {
   position: relative;
   z-index: 1;
@@ -86,21 +96,6 @@ body {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 0.35rem 1.2rem;
-}
-
-.home-link {
-  margin-right: auto;
-  color: var(--ink);
-  font-size: 0.95rem;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  text-decoration: none;
-}
-
-.home-link:hover,
-.home-link:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
 }
 
 .sections {
@@ -121,8 +116,63 @@ body {
   color: var(--ink);
 }
 
-.sections a:focus-visible,
-.home-link:focus-visible {
+.sections a:focus-visible {
+  outline: 1px solid var(--quiet);
+  outline-offset: 3px;
+}
+
+body.is-reading {
+  height: 100%;
+  overflow: hidden;
+}
+
+body.is-reading .page {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body.is-reading main.reading {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding-bottom: 1.25rem;
+}
+
+body.is-reading .colophon {
+  padding-top: 0.85rem;
+}
+
+body.is-reading .credit {
+  max-width: calc(100% - 7.5rem);
+}
+
+.places {
+  position: fixed;
+  z-index: 2;
+  right: clamp(1.75rem, 8vw, 7.5rem);
+  bottom: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.55rem;
+}
+
+.places a {
+  color: var(--ink);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  text-decoration: none;
+  text-shadow: 0 0 0.45rem var(--paper), 0 0 0.12rem var(--paper);
+}
+
+.places a:hover,
+.places a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.places a:focus-visible {
   outline: 1px solid var(--quiet);
   outline-offset: 3px;
 }

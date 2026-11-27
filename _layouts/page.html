@@ -10,7 +10,10 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/styles.css">
   </head>
-  <body>
+  <body class="is-reading">
+    <div class="ground is-still" aria-hidden="true">
+      <div class="ground-photo"></div>
+    </div>
     <div class="page">
       {% include mast.html %}
       <main class="reading">
@@ -44,7 +47,18 @@
         </article>
         {% endif %}
       </main>
+      <footer class="colophon">
+        <a class="credit" href="https://commons.wikimedia.org/wiki/File:Killerwhales_jumping.jpg">Photo: Robert Pittman / NOAA</a>
+      </footer>
     </div>
+    <nav class="places" data-i18n-label="places" aria-label="Pages">
+      <a href="/" data-i18n="home">Home</a>
+      {% if page.section == "briefings" %}
+      <a href="/writings/" data-i18n="writings">Writings</a>
+      {% else %}
+      <a href="/briefings/" data-i18n="briefings">Briefings</a>
+      {% endif %}
+    </nav>
     <script src="/site.js"></script>
   </body>
 </html>

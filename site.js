@@ -10,7 +10,9 @@
       creditPrefix: "照片：",
       briefings: "简报",
       writings: "文字",
-      sections: "栏目"
+      sections: "栏目",
+      home: "首页",
+      places: "页面"
     },
     "zh-HK": {
       lang: "zh-HK",
@@ -21,7 +23,9 @@
       creditPrefix: "相片：",
       briefings: "簡報",
       writings: "文字",
-      sections: "欄目"
+      sections: "欄目",
+      home: "首頁",
+      places: "頁面"
     },
     en: {
       lang: "en",
@@ -32,7 +36,9 @@
       creditPrefix: "Photo: ",
       briefings: "Briefings",
       writings: "Writings",
-      sections: "Sections"
+      sections: "Sections",
+      home: "Home",
+      places: "Pages"
     }
   };
 
@@ -184,45 +190,69 @@
   });
 
   var refreshCredit = function () {};
+  var FRAME = "pw-frame";
+
+  function readFrame(count) {
+    try {
+      var n = parseInt(sessionStorage.getItem(FRAME), 10);
+      if (n >= 0 && n < count) return n;
+    } catch (error) {
+      /* Storage can be blocked. */
+    }
+    return null;
+  }
+
+  function rememberFrame(n) {
+    try {
+      sessionStorage.setItem(FRAME, String(n));
+    } catch (error) {
+      /* Ignore private-mode storage failures. */
+    }
+  }
 
   function initGround() {
-    var nodes = document.querySelectorAll(".ground-photo");
+    var ground = document.querySelector(".ground");
+    if (!ground) return;
+    var nodes = ground.querySelectorAll(".ground-photo");
     if (!nodes.length) return;
+    var still = ground.classList.contains("is-still");
 
     var photos = [
       {
-        file: "images/orca-pittman-jumping.jpg",
+        file: "/images/orca-pittman-jumping.jpg",
         credit: "Robert Pittman / NOAA",
         commons: "https://commons.wikimedia.org/wiki/File:Killerwhales_jumping.jpg"
       },
       {
-        file: "images/orca-noaa-pair.jpg",
+        file: "/images/orca-noaa-pair.jpg",
         credit: "NOAA Photo Library",
         commons: "https://commons.wikimedia.org/wiki/File:Anim1102_-_Flickr_-_NOAA_Photo_Library.jpg"
       },
       {
-        file: "images/orca-dorsal.jpg",
+        file: "/images/orca-dorsal.jpg",
         credit: "Shannon Rankin / NOAA",
         commons: "https://commons.wikimedia.org/wiki/File:Orcinus_orca_NOAA_Photo_Library.jpg"
       },
       {
-        file: "images/orca-shimada-surface.jpg",
+        file: "/images/orca-shimada-surface.jpg",
         credit: "Allen Shimada / NOAA",
         commons: "https://commons.wikimedia.org/wiki/File:Anim1133_-_Flickr_-_NOAA_Photo_Library.jpg"
       },
       {
-        file: "images/orca-shimada-birds.jpg",
+        file: "/images/orca-shimada-birds.jpg",
         credit: "Allen Shimada / NOAA",
         commons: "https://commons.wikimedia.org/wiki/File:Anim1125_-_Flickr_-_NOAA_Photo_Library.jpg"
       },
       {
-        file: "images/orca-shimada-wake.jpg",
+        file: "/images/orca-shimada-wake.jpg",
         credit: "Allen Shimada / NOAA",
         commons: "https://commons.wikimedia.org/wiki/File:Anim1130_-_Flickr_-_NOAA_Photo_Library.jpg"
       }
     ];
     var credit = document.querySelector(".credit");
-    var index = Math.floor(Math.random() * photos.length);
+    var stored = readFrame(photos.length);
+    var index = stored === null ? Math.floor(Math.random() * photos.length) : stored;
+    rememberFrame(index);
     var shown = 0;
     var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     var timer = 0;
@@ -250,6 +280,7 @@
     nodes[0].classList.add("is-on");
     refreshCredit();
     preload(photos[index].file);
+    if (still) return;
 
     var queue = [];
     var cursor = 0;
@@ -264,6 +295,7 @@
 
     function advance() {
       var next = (index + 1) % photos.length;
+      rememberFrame(next);
       var incoming = shown === 0 ? 1 : 0;
       var outgoing = shown;
       paint(nodes[incoming], photos[next]);
