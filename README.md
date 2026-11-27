@@ -15,7 +15,7 @@
 | `index.html` | 首页 |
 | `styles.css` | 样式 |
 | `site.js` | 语言下拉菜单。选择保存在 `localStorage`（键名 `pw-lang`）；第一次打开时，若浏览器语言明确是简体中文、香港中文或英文，则跟随浏览器 |
-| `favicon.svg` | 浏览器标签图标，一枚很小的虎鲸 |
+| `icon.svg` | 浏览器标签图标，一枚很小的虎鲸 |
 | `.nojekyll` | 让 GitHub Pages 按原样提供这些文件，不经过 Jekyll |
 
 三种语言的文案在 `site.js` 的 `copy` 里。名字 Patrick Wong 三种语言都保留。
