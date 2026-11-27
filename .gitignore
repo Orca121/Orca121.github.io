@@ -26,3 +26,6 @@ Desktop.ini
 node_modules/
 .cache/
 dist/
+_site/
+.jekyll-cache/
+.jekyll-metadata

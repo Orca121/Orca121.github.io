@@ -1,0 +1,27 @@
+<header class="mast">
+  {% if page.section %}
+  <a class="home-link" href="/">Patrick Wong</a>
+  {% endif %}
+  <nav class="sections" data-i18n-label="sections" aria-label="Sections">
+    <a href="/briefings/" data-i18n="briefings"{% if page.section == "briefings" %} aria-current="page"{% endif %}>Briefings</a>
+    <a href="/writings/" data-i18n="writings"{% if page.section == "writings" %} aria-current="page"{% endif %}>Writings</a>
+  </nav>
+  <div class="lang">
+    <button
+      type="button"
+      class="lang-button"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+      aria-controls="lang-list"
+      aria-label="Language"
+    >
+      <span class="lang-value">English</span>
+      <span class="caret" aria-hidden="true"></span>
+    </button>
+    <ul id="lang-list" class="lang-list" role="listbox" aria-label="Language" hidden>
+      <li id="opt-zh-CN" role="option" data-lang="zh-CN" lang="zh-CN" aria-selected="false">简体中文</li>
+      <li id="opt-zh-HK" role="option" data-lang="zh-HK" lang="zh-HK" aria-selected="false">繁體中文</li>
+      <li id="opt-en" role="option" data-lang="en" lang="en" aria-selected="true">English</li>
+    </ul>
+  </div>
+</header>

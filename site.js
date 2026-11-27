@@ -7,7 +7,10 @@
       intro: "活着，爱着，赴宴去。",
       description: "Patrick Wong 的个人主页。",
       switcher: "语言",
-      creditPrefix: "照片："
+      creditPrefix: "照片：",
+      briefings: "简报",
+      writings: "文字",
+      sections: "栏目"
     },
     "zh-HK": {
       lang: "zh-HK",
@@ -15,7 +18,10 @@
       intro: "活著，愛著，赴宴去。",
       description: "Patrick Wong 的個人主頁。",
       switcher: "語言",
-      creditPrefix: "相片："
+      creditPrefix: "相片：",
+      briefings: "簡報",
+      writings: "文字",
+      sections: "欄目"
     },
     en: {
       lang: "en",
@@ -23,7 +29,10 @@
       intro: "Living, Loving, Party Going.",
       description: "Personal site of Patrick Wong.",
       switcher: "Language",
-      creditPrefix: "Photo: "
+      creditPrefix: "Photo: ",
+      briefings: "Briefings",
+      writings: "Writings",
+      sections: "Sections"
     }
   };
 
@@ -64,6 +73,12 @@
       if (!text[key]) continue;
       if (nodes[i].tagName === "IMG") nodes[i].alt = text[key];
       else nodes[i].textContent = text[key];
+    }
+
+    var labelled = document.querySelectorAll("[data-i18n-label]");
+    for (var n = 0; n < labelled.length; n += 1) {
+      var labelKey = labelled[n].getAttribute("data-i18n-label");
+      if (text[labelKey]) labelled[n].setAttribute("aria-label", text[labelKey]);
     }
 
     var description = document.querySelector('meta[name="description"]');
@@ -171,6 +186,9 @@
   var refreshCredit = function () {};
 
   function initGround() {
+    var nodes = document.querySelectorAll(".ground-photo");
+    if (!nodes.length) return;
+
     var photos = [
       {
         file: "images/orca-pittman-jumping.jpg",
@@ -203,7 +221,6 @@
         commons: "https://commons.wikimedia.org/wiki/File:Anim1130_-_Flickr_-_NOAA_Photo_Library.jpg"
       }
     ];
-    var nodes = document.querySelectorAll(".ground-photo");
     var credit = document.querySelector(".credit");
     var index = Math.floor(Math.random() * photos.length);
     var shown = 0;
@@ -222,6 +239,7 @@
     }
 
     refreshCredit = function () {
+      if (!credit) return;
       var photo = photos[index];
       var text = copy[document.documentElement.lang] || copy["zh-CN"];
       credit.textContent = text.creditPrefix + photo.credit;

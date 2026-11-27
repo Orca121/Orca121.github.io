@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.index_for == "writings" %}Writings{% elsif page.index_for == "briefings" %}Briefings{% else %}{{ page.title }}{% endif %} — Patrick Wong</title>
+    <meta name="description" content="Personal site of Patrick Wong.">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="page">
+      {% include mast.html %}
+      <main class="reading">
+        {% if page.index_for %}
+        <h1 data-i18n="{{ page.index_for }}">{% if page.index_for == "writings" %}Writings{% else %}Briefings{% endif %}</h1>
+        <ul class="index">
+          {% if page.index_for == "writings" %}
+            {% assign notes = site.writings | sort: "date" | reverse %}
+          {% else %}
+            {% assign notes = site.briefings | sort: "date" | reverse %}
+          {% endif %}
+          {% for note in notes %}
+          <li>
+            <a href="{{ note.url }}">
+              <span class="index-title">{{ note.title }}</span>
+              <time datetime="{{ note.date | date: '%Y-%m-%d' }}">{{ note.date | date: '%Y-%m-%d' }}</time>
+            </a>
+            {% if note.dek %}<p class="dek">{{ note.dek }}</p>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <article lang="{{ page.lang | default: 'en' }}">
+          <h1>{{ page.title }}</h1>
+          <p class="entry-meta">
+            <time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: '%Y-%m-%d' }}</time>{% if page.author %} · {{ page.author }}{% endif %}
+          </p>
+          <div class="prose">
+            {{ content }}
+          </div>
+        </article>
+        {% endif %}
+      </main>
+    </div>
+    <script src="/site.js"></script>
+  </body>
+</html>

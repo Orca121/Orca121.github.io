@@ -1,0 +1,32 @@
+title: Patrick Wong
+timezone: Etc/UTC
+future: true
+markdown: kramdown
+kramdown:
+  input: GFM
+
+collections:
+  briefings:
+    output: true
+    permalink: /briefings/:name/
+  writings:
+    output: true
+    permalink: /writings/:name/
+
+defaults:
+  - scope:
+      type: briefings
+    values:
+      layout: page
+      section: briefings
+  - scope:
+      type: writings
+    values:
+      layout: page
+      section: writings
+
+exclude:
+  - vendor
+  - Gemfile
+  - Gemfile.lock
+  - README.md
