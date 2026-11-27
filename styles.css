@@ -61,13 +61,13 @@ body {
   position: absolute;
   inset: 0;
   background: #ffffff;
-  opacity: 0.8;
+  opacity: 0.52;
 }
 
 @media (prefers-color-scheme: dark) {
   .ground::after {
     background: #000000;
-    opacity: 0.84;
+    opacity: 0.76;
   }
 }
 
