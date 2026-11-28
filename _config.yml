@@ -30,3 +30,15 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+
+giscus:
+  repo: Orca121/Orca121.github.io
+  repo_id: R_kgDOV-KpAw
+  category: ""
+  category_id: ""
+  mapping: pathname
+  strict: "1"
+  reactions_enabled: "1"
+  emit_metadata: "0"
+  input_position: bottom
+  theme: preferred_color_scheme

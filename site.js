@@ -12,7 +12,12 @@
       writings: "文字",
       sections: "栏目",
       home: "首页",
-      places: "页面"
+      places: "页面",
+      pinned: "置顶",
+      lockLabel: "答案",
+      lockSubmit: "解锁",
+      lockError: "答案不对。",
+      comments: "评论"
     },
     "zh-HK": {
       lang: "zh-HK",
@@ -25,7 +30,12 @@
       writings: "文字",
       sections: "欄目",
       home: "首頁",
-      places: "頁面"
+      places: "頁面",
+      pinned: "置頂",
+      lockLabel: "答案",
+      lockSubmit: "解鎖",
+      lockError: "答案不對。",
+      comments: "評論"
     },
     en: {
       lang: "en",
@@ -38,7 +48,12 @@
       writings: "Writings",
       sections: "Sections",
       home: "Home",
-      places: "Pages"
+      places: "Pages",
+      pinned: "Pinned",
+      lockLabel: "Answer",
+      lockSubmit: "Unlock",
+      lockError: "Wrong answer.",
+      comments: "Comments"
     }
   };
 
@@ -96,6 +111,8 @@
     }
     button.setAttribute("aria-activedescendant", options[indexOf(text.lang)].id);
     refreshCredit();
+    refreshLockPrompt();
+    refreshGiscus();
   }
 
   function remember(lang) {
@@ -330,6 +347,138 @@
     }
   }
 
+  /* Article lock (soft gate for casual readers) */
+  var lockArticle = document.querySelector("article[data-locked]");
+  var unlockedState = !lockArticle;
+
+  function decodeLock(value) {
+    return decodeURIComponent(String(value || "").replace(/\+/g, "%20"));
+  }
+
+  function currentLang() {
+    return document.documentElement.lang || "en";
+  }
+
+  function refreshLockPrompt() {
+    if (!lockArticle) return;
+    var prompt = document.getElementById("lock-prompt");
+    if (!prompt) return;
+    var lang = currentLang();
+    prompt.textContent =
+      lockArticle.getAttribute("data-lock-prompt-" + lang) ||
+      lockArticle.getAttribute("data-lock-prompt-en") ||
+      "";
+  }
+
+  function isUnlocked() {
+    return unlockedState;
+  }
+
+  function revealLockedArticle() {
+    if (!lockArticle || unlockedState) return;
+    unlockedState = true;
+    var body = document.getElementById("article-body");
+    var payload = document.getElementById("locked-body");
+    if (body && payload) {
+      body.innerHTML = decodeLock(payload.textContent);
+      body.hidden = false;
+    }
+    var lock = document.getElementById("lock");
+    if (lock) lock.hidden = true;
+    try {
+      sessionStorage.setItem("pw-unlocked:" + location.pathname, "1");
+    } catch (error) {
+      /* Ignore private-mode storage failures. */
+    }
+    loadGiscus();
+  }
+
+  function initLock() {
+    if (!lockArticle) return;
+    var form = document.getElementById("lock-form");
+    var input = document.getElementById("lock-answer");
+    var error = document.getElementById("lock-error");
+    if (!form || !input) return;
+
+    var expected = decodeLock(lockArticle.getAttribute("data-lock-answer"));
+
+    var saved = false;
+    try {
+      saved = sessionStorage.getItem("pw-unlocked:" + location.pathname) === "1";
+    } catch (error) {
+      /* Storage can be blocked. */
+    }
+    if (saved) {
+      revealLockedArticle();
+      return;
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var given = (input.value || "").replace(/^\s+|\s+$/g, "").toLowerCase();
+      var want = expected.replace(/^\s+|\s+$/g, "").toLowerCase();
+      if (given === want) {
+        revealLockedArticle();
+      } else if (error) {
+        error.hidden = false;
+        input.select();
+      }
+    });
+
+    refreshLockPrompt();
+  }
+
+  /* giscus comments */
+  var commentsSection = document.getElementById("comments");
+  var giscusLoaded = false;
+
+  function giscusLang(lang) {
+    if (lang === "zh-CN") return "zh-CN";
+    if (lang === "zh-HK") return "zh-TW";
+    return "en";
+  }
+
+  function giscusConfigured() {
+    if (!commentsSection) return false;
+    return (
+      (commentsSection.getAttribute("data-giscus-repo-id") || "") !== "" &&
+      (commentsSection.getAttribute("data-giscus-category-id") || "") !== ""
+    );
+  }
+
+  function loadGiscus(force) {
+    if (!commentsSection) return;
+    if (!giscusConfigured() || !isUnlocked()) {
+      commentsSection.hidden = true;
+      return;
+    }
+    if (giscusLoaded && !force) return;
+    commentsSection.hidden = false;
+    commentsSection.innerHTML = "";
+    var script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.setAttribute("data-repo", commentsSection.getAttribute("data-giscus-repo"));
+    script.setAttribute("data-repo-id", commentsSection.getAttribute("data-giscus-repo-id"));
+    script.setAttribute("data-category", commentsSection.getAttribute("data-giscus-category"));
+    script.setAttribute("data-category-id", commentsSection.getAttribute("data-giscus-category-id"));
+    script.setAttribute("data-mapping", commentsSection.getAttribute("data-giscus-mapping"));
+    script.setAttribute("data-strict", commentsSection.getAttribute("data-giscus-strict"));
+    script.setAttribute("data-reactions-enabled", commentsSection.getAttribute("data-giscus-reactions-enabled"));
+    script.setAttribute("data-emit-metadata", commentsSection.getAttribute("data-giscus-emit-metadata"));
+    script.setAttribute("data-input-position", commentsSection.getAttribute("data-giscus-input-position"));
+    script.setAttribute("data-theme", commentsSection.getAttribute("data-giscus-theme"));
+    script.setAttribute("data-lang", giscusLang(currentLang()));
+    commentsSection.appendChild(script);
+    giscusLoaded = true;
+  }
+
+  function refreshGiscus() {
+    loadGiscus(true);
+  }
+
   apply(preferredLanguage());
   initGround();
+  initLock();
 })();

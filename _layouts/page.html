@@ -19,13 +19,24 @@
       <main class="reading">
         {% if page.index_for %}
         <h1 data-i18n="{{ page.index_for }}">{% if page.index_for == "writings" %}Writings{% else %}Briefings{% endif %}</h1>
+        {% if page.index_for == "writings" %}
+          {% assign notes = site.writings | sort: "date" | reverse %}
+        {% else %}
+          {% assign notes = site.briefings | sort: "date" | reverse %}
+        {% endif %}
+        {% assign pinned_notes = notes | where: "pinned", true %}
+        {% assign other_notes = notes | where_exp: "note", "note.pinned != true" %}
         <ul class="index">
-          {% if page.index_for == "writings" %}
-            {% assign notes = site.writings | sort: "date" | reverse %}
-          {% else %}
-            {% assign notes = site.briefings | sort: "date" | reverse %}
-          {% endif %}
-          {% for note in notes %}
+          {% for note in pinned_notes %}
+          <li>
+            <a href="{{ note.url }}">
+              <span class="index-title">{{ note.title }}<span class="pin-mark" data-i18n="pinned">Pinned</span></span>
+              <time datetime="{{ note.date | date: '%Y-%m-%d' }}">{{ note.date | date: '%Y-%m-%d' }}</time>
+            </a>
+            {% if note.dek %}<p class="dek">{{ note.dek }}</p>{% endif %}
+          </li>
+          {% endfor %}
+          {% for note in other_notes %}
           <li>
             <a href="{{ note.url }}">
               <span class="index-title">{{ note.title }}</span>
@@ -36,15 +47,44 @@
           {% endfor %}
         </ul>
         {% else %}
-        <article lang="{{ page.lang | default: 'en' }}">
+        {% assign locked = false %}
+        {% if page.lock and page.lock != "" and page.lock != true and page.lock != false %}
+          {% assign locked = true %}
+        {% endif %}
+        <article lang="{{ page.lang | default: 'en' }}"{% if locked %} data-locked data-lock-answer="{{ page.lock | url_encode }}" data-lock-prompt-en="{{ page.lock_prompt['en'] | escape }}" data-lock-prompt-zh-CN="{{ page.lock_prompt['zh-CN'] | escape }}" data-lock-prompt-zh-HK="{{ page.lock_prompt['zh-HK'] | escape }}"{% endif %}>
           <h1>{{ page.title }}</h1>
           <p class="entry-meta">
             <time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: '%Y-%m-%d' }}</time>{% if page.author %} · {{ page.author }}{% endif %}
           </p>
-          <div class="prose">
-            {{ content }}
+          {% if locked %}
+          <div class="lock" id="lock">
+            <p class="lock-prompt" id="lock-prompt">{{ page.lock_prompt['en'] | escape }}</p>
+            <form class="lock-form" id="lock-form">
+              <label class="lock-label" for="lock-answer" data-i18n="lockLabel">Answer</label>
+              <input class="lock-input" id="lock-answer" name="answer" type="text" autocomplete="off" spellcheck="false">
+              <button class="lock-submit" type="submit" data-i18n="lockSubmit">Unlock</button>
+              <p class="lock-error" id="lock-error" data-i18n="lockError" hidden>Wrong answer.</p>
+            </form>
           </div>
+          <div class="prose" id="article-body" hidden></div>
+          <script type="text/plain" id="locked-body">{{ content | url_encode }}</script>
+          {% else %}
+          <div class="prose">{{ content }}</div>
+          {% endif %}
         </article>
+        {% if site.giscus %}
+        <section class="comments" id="comments" aria-label="Comments" data-i18n-label="comments" hidden
+          data-giscus-repo="{{ site.giscus.repo }}"
+          data-giscus-repo-id="{{ site.giscus.repo_id }}"
+          data-giscus-category="{{ site.giscus.category }}"
+          data-giscus-category-id="{{ site.giscus.category_id }}"
+          data-giscus-mapping="{{ site.giscus.mapping }}"
+          data-giscus-strict="{{ site.giscus.strict }}"
+          data-giscus-reactions-enabled="{{ site.giscus.reactions_enabled }}"
+          data-giscus-emit-metadata="{{ site.giscus.emit_metadata }}"
+          data-giscus-input-position="{{ site.giscus.input_position }}"
+          data-giscus-theme="{{ site.giscus.theme }}"></section>
+        {% endif %}
         {% endif %}
       </main>
       <footer class="colophon">
