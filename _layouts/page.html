@@ -48,17 +48,17 @@
         </ul>
         {% else %}
         {% assign locked = false %}
-        {% if page.lock and page.lock != "" and page.lock != true and page.lock != false %}
+        {% if page.lock %}
           {% assign locked = true %}
         {% endif %}
-        <article lang="{{ page.lang | default: 'en' }}"{% if locked %} data-locked data-lock-answer="{{ page.lock | url_encode }}" data-lock-prompt-en="{{ page.lock_prompt['en'] | escape }}" data-lock-prompt-zh-CN="{{ page.lock_prompt['zh-CN'] | escape }}" data-lock-prompt-zh-HK="{{ page.lock_prompt['zh-HK'] | escape }}"{% endif %}>
+        <article lang="{{ page.lang | default: 'en' }}"{% if locked %} data-locked{% endif %}>
           <h1>{{ page.title }}</h1>
           <p class="entry-meta">
             <time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: '%Y-%m-%d' }}</time>{% if page.author %} · {{ page.author }}{% endif %}
           </p>
           {% if locked %}
           <div class="lock" id="lock">
-            <p class="lock-prompt" id="lock-prompt">{{ page.lock_prompt['en'] | escape }}</p>
+            <p class="lock-prompt" id="lock-prompt"></p>
             <form class="lock-form" id="lock-form">
               <label class="lock-label" for="lock-answer" data-i18n="lockLabel">Answer</label>
               <input class="lock-input" id="lock-answer" name="answer" type="text" autocomplete="off" spellcheck="false">

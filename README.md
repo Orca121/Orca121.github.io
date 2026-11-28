@@ -14,7 +14,7 @@ GitHub Pages 用 Jekyll 从 `master` 根目录发布。首页仍是手写的 `in
 | --- | --- |
 | `index.html` | 首页 |
 | `styles.css` | 样式 |
-| `site.js` | 语言下拉菜单、背景照片、文章上锁和 giscus 评论。语言选择保存在 `localStorage`（键名 `pw-lang`）。没有保存过的选择时，页面用英文。同一次访问里，当前照片记在 `sessionStorage`（键名 `pw-frame`）：首页交替时更新，阅读页只读取并停住。解锁状态记在 `sessionStorage`（键名 `pw-unlocked:路径`），刷新同一标签页不会再问 |
+| `site.js` | 语言下拉菜单、背景照片、文章上锁和 giscus 评论。语言选择保存在 `localStorage`（键名 `pw-lang`）。没有保存过的选择时，页面用英文。同一次访问里，当前照片记在 `sessionStorage`（键名 `pw-frame`）：首页交替时更新，阅读页只读取并停住。上锁文章随机选中的问题记在 `sessionStorage`（键名 `pw-lock-question:路径`），解锁状态记在 `sessionStorage`（键名 `pw-unlocked:路径`），刷新同一标签页保持同一道题、不会再问 |
 | `icon.svg` | 浏览器标签上的字母标记 |
 | `images/` | 六张彩色照片，公有领域 |
 | `_briefings/` | 简报的 Markdown。每篇需有标题、日期、作者 Stanley、`kind`（`daily` 或 `weekly`） |
@@ -54,19 +54,25 @@ pinned: true
 
 ## 上锁（软门槛）
 
-在 front matter 里写一个非空字符串 `lock:`，并给出三种语言的问题 `lock_prompt`：
+在 front matter 里写 `lock: true`，正文就会在答对问题前隐藏（标题、日期和作者仍然可见）：
 
 ```yaml
 ---
-lock: Catullus
-lock_prompt:
-  en: Who is the site owner's favorite ancient Roman poet?
-  zh-CN: 网站主人最爱的古罗马诗人是谁？
-  zh-HK: 網站主人最愛的古羅馬詩人是誰？
+title: 标题
+date: 2026-11-25
+pinned: true
+lock: true
 ---
 ```
 
-标题、日期和作者仍然可见，正文和评论区在答对问题前隐藏。答案按「去掉首尾空白、忽略大小写」比较；`lock: true` 这类 YAML 布尔值不是有效答案，空值或不写 `lock` 表示不上锁。
+上锁后，页面从两道题里随机显示一道，访客必须回答屏幕上显示的那道题：
+
+1. 网站主人最爱的古罗马诗人是谁？（答案：Catullus）
+2. 网站主人最爱的意大利语诗人是谁？（答案：Giacomo Leopardi）
+
+两道题各带英文、简体中文、香港繁体三种文字，跟随站点语言切换，切换不刷新页面。答案只认拉丁字母，按「去掉首尾空白、忽略大小写」比较，不认中文写法（卡图卢斯、贾科莫等）。
+
+同一标签页里每道题只随机选一次：选中的问题记在 `sessionStorage`（键名 `pw-lock-question:路径`），刷新或切换语言都保持同一道题；不同页面各自独立随机。解锁状态记在 `sessionStorage`（键名 `pw-unlocked:路径`），刷新同一标签页不会再问。`lock` 不写或为空表示不上锁。
 
 这不是真正的安全：仓库里仍然有原文和答案；构建出来的 HTML 只是把正文用 `url_encode` 混淆，View Source 看不到可读正文，但拿到源码的人仍能还原。它只是一个挡住随手读者的软门槛。
 

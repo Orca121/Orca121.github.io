@@ -351,6 +351,28 @@
   var lockArticle = document.querySelector("article[data-locked]");
   var unlockedState = !lockArticle;
 
+  var pickedLockQuestion = null;
+  var LOCK_BANK = [
+    {
+      id: "roman-poet",
+      answer: "Catullus",
+      prompts: {
+        en: "Who is the site owner's favorite ancient Roman poet?",
+        "zh-CN": "网站主人最爱的古罗马诗人是谁？",
+        "zh-HK": "網站主人最愛的古羅馬詩人是誰？"
+      }
+    },
+    {
+      id: "italian-poet",
+      answer: "Giacomo Leopardi",
+      prompts: {
+        en: "Who is the site owner's favorite Italian-language poet?",
+        "zh-CN": "网站主人最爱的意大利语诗人是谁？",
+        "zh-HK": "網站主人最愛的意大利語詩人是誰？"
+      }
+    }
+  ];
+
   function decodeLock(value) {
     return decodeURIComponent(String(value || "").replace(/\+/g, "%20"));
   }
@@ -359,15 +381,48 @@
     return document.documentElement.lang || "en";
   }
 
+  function lockQuestionKey() {
+    return "pw-lock-question:" + location.pathname;
+  }
+
+  function findLockQuestion(id) {
+    for (var i = 0; i < LOCK_BANK.length; i += 1) {
+      if (LOCK_BANK[i].id === id) return LOCK_BANK[i];
+    }
+    return null;
+  }
+
+  function chosenLockQuestion() {
+    if (!lockArticle) return null;
+    if (pickedLockQuestion) return pickedLockQuestion;
+    var key = lockQuestionKey();
+    var stored = null;
+    try {
+      stored = sessionStorage.getItem(key);
+    } catch (error) {
+      /* Storage can be blocked. */
+    }
+    var question = findLockQuestion(stored);
+    if (!question) {
+      question = LOCK_BANK[Math.floor(Math.random() * LOCK_BANK.length)];
+    }
+    pickedLockQuestion = question;
+    try {
+      sessionStorage.setItem(key, question.id);
+    } catch (error) {
+      /* Ignore private-mode storage failures. */
+    }
+    return question;
+  }
+
   function refreshLockPrompt() {
     if (!lockArticle) return;
     var prompt = document.getElementById("lock-prompt");
     if (!prompt) return;
+    var question = chosenLockQuestion();
+    if (!question) return;
     var lang = currentLang();
-    prompt.textContent =
-      lockArticle.getAttribute("data-lock-prompt-" + lang) ||
-      lockArticle.getAttribute("data-lock-prompt-en") ||
-      "";
+    prompt.textContent = question.prompts[lang] || question.prompts.en || "";
   }
 
   function isUnlocked() {
@@ -400,7 +455,8 @@
     var error = document.getElementById("lock-error");
     if (!form || !input) return;
 
-    var expected = decodeLock(lockArticle.getAttribute("data-lock-answer"));
+    var question = chosenLockQuestion();
+    var expected = question ? decodeLock(question.answer) : "";
 
     var saved = false;
     try {
