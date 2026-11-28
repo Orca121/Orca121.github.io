@@ -14,7 +14,7 @@ GitHub Pages 用 Jekyll 从 `master` 根目录发布。首页仍是手写的 `in
 | --- | --- |
 | `index.html` | 首页 |
 | `styles.css` | 样式 |
-| `site.js` | 语言下拉菜单、背景照片、文章上锁和 giscus 评论。语言选择保存在 `localStorage`（键名 `pw-lang`）。没有保存过的选择时，页面用英文。当前照片记在 `pw-frame`：首页会轮换，首页刷新会从下一张开始；首次进入内页时保留首页的那张照片；刷新内页或在不同的内页之间移动（例如从「简报」到「文字」）会换到下一张，然后停住。上锁文章随机选中的问题记在 `sessionStorage`（键名 `pw-lock-question:路径`），解锁状态记在 `sessionStorage`（键名 `pw-unlocked:路径`），刷新同一标签页保持同一道题、不会再问 |
+| `site.js` | 语言下拉菜单、背景照片、文章上锁和 giscus 评论。语言选择保存在 `localStorage`（键名 `pw-lang`）。没有保存过的选择时，页面用英文。当前照片记在 `pw-frame`：只在首页轮换；首页载入或刷新会从下一张开始，从内页返回首页时也会先换到下一张，然后继续轮换；进入内页后固定显示离开首页时的照片，刷新内页或在不同的内页之间移动（例如从「简报」到「文字」）都不改变照片。上锁文章随机选中的问题记在 `sessionStorage`（键名 `pw-lock-question:路径`），解锁状态记在 `sessionStorage`（键名 `pw-unlocked:路径`），刷新同一标签页保持同一道题、不会再问 |
 | `icon.svg` | 浏览器标签上的字母标记 |
 | `images/` | 六张彩色照片，公有领域 |
 | `_briefings/` | 简报的 Markdown。每篇需有标题、日期、作者 Stanley、`kind`（`daily` 或 `weekly`） |
