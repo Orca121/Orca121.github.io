@@ -142,41 +142,6 @@ body.is-reading .colophon {
   padding-top: 0.85rem;
 }
 
-body.is-reading .credit {
-  max-width: calc(100% - 7.5rem);
-}
-
-.places {
-  position: fixed;
-  z-index: 2;
-  right: clamp(1.75rem, 8vw, 7.5rem);
-  bottom: 1.4rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.55rem;
-}
-
-.places a {
-  color: var(--ink);
-  font-size: 0.75rem;
-  letter-spacing: 0.01em;
-  line-height: 1.15;
-  text-decoration: none;
-  text-shadow: 0 0 0.45rem var(--paper), 0 0 0.12rem var(--paper);
-}
-
-.places a:hover,
-.places a:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
-}
-
-.places a:focus-visible {
-  outline: 1px solid var(--quiet);
-  outline-offset: 3px;
-}
-
 main {
   max-width: 32rem;
   padding-top: clamp(3.25rem, 13vh, 7rem);

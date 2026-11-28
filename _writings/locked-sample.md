@@ -3,7 +3,6 @@ title: A locked sample
 date: 2026-11-25
 dek: A sample of the article lock. Not by Patrick Wong.
 lang: en
-pinned: true
 lock: true
 ---
 

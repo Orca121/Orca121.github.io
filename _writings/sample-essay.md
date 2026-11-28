@@ -3,6 +3,7 @@ title: A sample essay
 date: 2026-11-18
 dek: Placeholder prose. Patrick Wong did not write this.
 lang: en
+pinned: true
 ---
 
 ## A line and a pause
