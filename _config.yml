@@ -34,8 +34,8 @@ exclude:
 giscus:
   repo: Orca121/Orca121.github.io
   repo_id: R_kgDOV-KpAw
-  category: ""
-  category_id: ""
+  category: Announcements
+  category_id: DIC_kwDOV-KpA84DMJzN
   mapping: pathname
   strict: "1"
   reactions_enabled: "1"

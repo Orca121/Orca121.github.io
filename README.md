@@ -84,12 +84,7 @@ lock: true
 
 ## giscus 评论
 
-评论只出现在单篇文章页，首页和列表页没有。上锁的文章解锁后才加载评论。现在 `_config.yml` 的 `giscus` 里 `category` 和 `category_id` 还是空的，所以页面不会发出评论脚本，也不会出现坏掉的部件。要启用：
-
-1. 在仓库开启 Discussions，并按 giscus 官网的引导安装 giscus GitHub App。
-2. 新建（或选择）一个 Discussion 分类。
-3. 把分类名和分类 ID 填进 `_config.yml` 的 `giscus` 下：`category` 填分类名，`category_id` 填分类 ID。
-4. 提交并推送到 `master`，重新发布后即可生效。评论语言跟随站点语言：en → en，zh-CN → zh-CN，zh-HK → zh-TW（giscus 没有 zh-HK）。
+评论只出现在单篇文章页，首页和列表页没有。上锁的文章解锁后才加载评论。`_config.yml` 里已填入 Discussions 分类 `Announcements` 及其 ID。评论语言跟随站点语言：en → en，zh-CN → zh-CN，zh-HK → zh-TW（giscus 没有 zh-HK）。
 
 ## 如何发布
 
