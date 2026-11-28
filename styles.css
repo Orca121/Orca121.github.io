@@ -129,13 +129,47 @@ body.is-reading {
 body.is-reading .page {
   height: 100dvh;
   overflow: hidden;
+  padding-inline: 0;
+}
+
+body.is-reading .mast,
+body.is-reading .colophon {
+  flex: 0 0 auto;
+  padding-inline: clamp(1.75rem, 8vw, 7.5rem);
 }
 
 body.is-reading main.reading {
   flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
   min-height: 0;
   overflow: auto;
+  padding-inline: clamp(1.75rem, 8vw, 7.5rem);
   padding-bottom: 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--quiet) transparent;
+}
+
+body.is-reading main.reading::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+body.is-reading main.reading::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0;
+}
+
+body.is-reading main.reading::-webkit-scrollbar-thumb {
+  background: var(--quiet);
+  border: 0;
+  border-radius: 0;
+}
+
+body.is-reading main.reading::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 body.is-reading .colophon {
@@ -166,7 +200,6 @@ h1 {
 }
 
 .reading {
-  max-width: 38rem;
   padding-top: clamp(2.6rem, 8vh, 4.25rem);
 }
 
@@ -174,6 +207,24 @@ h1 {
   font-size: clamp(1.85rem, 4vw, 2.45rem);
   line-height: 1.15;
   letter-spacing: -0.024em;
+}
+
+body.is-reading main.reading > h1,
+body.is-reading main.reading > .index,
+body.is-reading main.reading > .pager,
+body.is-reading main.reading > article,
+body.is-reading main.reading > .comments {
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+body.is-reading main.reading .prose,
+body.is-reading main.reading .dek,
+body.is-reading main.reading .lock {
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
 }
 
 .index {
