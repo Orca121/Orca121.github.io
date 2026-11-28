@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% if page.index_for == "writings" %}Writings{% elsif page.index_for == "briefings" %}Briefings{% else %}{{ page.title }}{% endif %} — Patrick Wong</title>
+    <title>{% if page.index_for == "writings" %}Writings{% elsif page.index_for == "briefings" %}Briefings{% else %}{{ page.title }}{% endif %}{% if page.list_page and page.list_page > 1 %}, page {{ page.list_page }}{% endif %} — Patrick Wong</title>
     <meta name="description" content="Personal site of Patrick Wong.">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -21,13 +21,28 @@
         <h1 data-i18n="{{ page.index_for }}">{% if page.index_for == "writings" %}Writings{% else %}Briefings{% endif %}</h1>
         {% if page.index_for == "writings" %}
           {% assign notes = site.writings | sort: "date" | reverse %}
+          {% assign list_root = "/writings/" %}
         {% else %}
           {% assign notes = site.briefings | sort: "date" | reverse %}
+          {% assign list_root = "/briefings/" %}
         {% endif %}
         {% assign pinned_notes = notes | where: "pinned", true %}
         {% assign other_notes = notes | where_exp: "note", "note.pinned != true" %}
+        {% assign per_page = 10 %}
+        {% assign list_page = page.list_page | default: 1 | plus: 0 %}
+        {% if list_page < 1 %}{% assign list_page = 1 %}{% endif %}
+        {% assign total = pinned_notes.size | plus: other_notes.size %}
+        {% if total == 0 %}
+          {% assign total_pages = 1 %}
+        {% else %}
+          {% assign total_pages = total | plus: per_page | minus: 1 | divided_by: per_page %}
+        {% endif %}
+        {% assign offset = list_page | minus: 1 | times: per_page %}
+        {% assign shown = 0 %}
+        {% assign seen = 0 %}
         <ul class="index">
           {% for note in pinned_notes %}
+            {% if seen >= offset and shown < per_page %}
           <li>
             <a href="{{ note.url }}">
               <span class="index-title">{{ note.title }}<span class="pin-mark" data-i18n="pinned">Pinned</span></span>
@@ -35,8 +50,12 @@
             </a>
             {% if note.dek %}<p class="dek">{{ note.dek }}</p>{% endif %}
           </li>
+              {% assign shown = shown | plus: 1 %}
+            {% endif %}
+            {% assign seen = seen | plus: 1 %}
           {% endfor %}
           {% for note in other_notes %}
+            {% if seen >= offset and shown < per_page %}
           <li>
             <a href="{{ note.url }}">
               <span class="index-title">{{ note.title }}</span>
@@ -44,8 +63,32 @@
             </a>
             {% if note.dek %}<p class="dek">{{ note.dek }}</p>{% endif %}
           </li>
+              {% assign shown = shown | plus: 1 %}
+            {% endif %}
+            {% assign seen = seen | plus: 1 %}
           {% endfor %}
         </ul>
+        {% if total_pages > 1 %}
+        <nav class="pager" data-i18n-label="pager" aria-label="Pagination">
+          {% if list_page > 1 %}
+            {% assign prev_page = list_page | minus: 1 %}
+            {% if prev_page == 1 %}
+          <a class="pager-prev" href="{{ list_root }}" data-i18n="previousPage">Previous</a>
+            {% else %}
+          <a class="pager-prev" href="{{ list_root }}page/{{ prev_page }}/" data-i18n="previousPage">Previous</a>
+            {% endif %}
+          {% else %}
+          <span class="pager-prev is-disabled" data-i18n="previousPage">Previous</span>
+          {% endif %}
+          <span class="pager-status">{{ list_page }} / {{ total_pages }}</span>
+          {% if list_page < total_pages %}
+            {% assign next_page = list_page | plus: 1 %}
+          <a class="pager-next" href="{{ list_root }}page/{{ next_page }}/" data-i18n="nextPage">Next</a>
+          {% else %}
+          <span class="pager-next is-disabled" data-i18n="nextPage">Next</span>
+          {% endif %}
+        </nav>
+        {% endif %}
         {% else %}
         {% assign locked = false %}
         {% if page.lock %}
