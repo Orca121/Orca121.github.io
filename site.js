@@ -218,9 +218,10 @@
   var refreshCredit = function () {};
   var FRAME = "pw-frame";
 
-  function readFrame(count) {
+  function readFrame(area, count) {
     try {
-      var n = parseInt(sessionStorage.getItem(FRAME), 10);
+      var storage = window[area];
+      var n = parseInt(storage.getItem(FRAME), 10);
       if (n >= 0 && n < count) return n;
     } catch (error) {
       /* Storage can be blocked. */
@@ -228,9 +229,10 @@
     return null;
   }
 
-  function rememberFrame(n) {
+  function rememberFrame(area, n) {
     try {
-      sessionStorage.setItem(FRAME, String(n));
+      var storage = window[area];
+      storage.setItem(FRAME, String(n));
     } catch (error) {
       /* Ignore private-mode storage failures. */
     }
@@ -276,9 +278,22 @@
       }
     ];
     var credit = document.querySelector(".credit");
-    var stored = readFrame(photos.length);
-    var index = stored === null ? Math.floor(Math.random() * photos.length) : stored;
-    rememberFrame(index);
+    var index;
+    if (still) {
+      var sessionFrame = readFrame("sessionStorage", photos.length);
+      var localFrame = readFrame("localStorage", photos.length);
+      index = sessionFrame;
+      if (index === null) index = localFrame;
+      if (index === null) index = Math.floor(Math.random() * photos.length);
+      rememberFrame("sessionStorage", index);
+      if (sessionFrame === null && localFrame === null) rememberFrame("localStorage", index);
+    } else {
+      var previous = readFrame("localStorage", photos.length);
+      if (previous === null) previous = readFrame("sessionStorage", photos.length);
+      index = previous === null ? Math.floor(Math.random() * photos.length) : (previous + 1) % photos.length;
+      rememberFrame("sessionStorage", index);
+      rememberFrame("localStorage", index);
+    }
     var shown = 0;
     var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     var timer = 0;
@@ -321,7 +336,8 @@
 
     function advance() {
       var next = (index + 1) % photos.length;
-      rememberFrame(next);
+      rememberFrame("sessionStorage", next);
+      rememberFrame("localStorage", next);
       var incoming = shown === 0 ? 1 : 0;
       var outgoing = shown;
       paint(nodes[incoming], photos[next]);
