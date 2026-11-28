@@ -217,6 +217,7 @@
 
   var refreshCredit = function () {};
   var FRAME = "pw-frame";
+  var FRAME_PATH = "pw-frame-path";
 
   function readFrame(area, count) {
     try {
@@ -229,13 +230,27 @@
     return null;
   }
 
-  function rememberFrame(area, n) {
+  function readFramePath(area) {
+    try {
+      return window[area].getItem(FRAME_PATH) || "";
+    } catch (error) {
+      /* Storage can be blocked. */
+    }
+    return "";
+  }
+
+  function rememberFrame(area, n, path) {
     try {
       var storage = window[area];
       storage.setItem(FRAME, String(n));
+      storage.setItem(FRAME_PATH, path);
     } catch (error) {
       /* Ignore private-mode storage failures. */
     }
+  }
+
+  function isHomePath(path) {
+    return path === "" || path === "/" || path === "/index.html";
   }
 
   function initGround() {
@@ -282,17 +297,29 @@
     if (still) {
       var sessionFrame = readFrame("sessionStorage", photos.length);
       var localFrame = readFrame("localStorage", photos.length);
-      index = sessionFrame;
-      if (index === null) index = localFrame;
-      if (index === null) index = Math.floor(Math.random() * photos.length);
-      rememberFrame("sessionStorage", index);
-      if (sessionFrame === null && localFrame === null) rememberFrame("localStorage", index);
+      var storedFrame = sessionFrame;
+      var storedArea = "sessionStorage";
+      if (storedFrame === null) {
+        storedFrame = localFrame;
+        storedArea = "localStorage";
+      }
+      if (storedFrame === null) {
+        index = Math.floor(Math.random() * photos.length);
+      } else if (isHomePath(readFramePath(storedArea))) {
+        index = storedFrame;
+      } else {
+        index = (storedFrame + 1) % photos.length;
+      }
+      rememberFrame("sessionStorage", index, location.pathname);
+      if (sessionFrame === null && localFrame === null) {
+        rememberFrame("localStorage", index, location.pathname);
+      }
     } else {
       var previous = readFrame("localStorage", photos.length);
       if (previous === null) previous = readFrame("sessionStorage", photos.length);
       index = previous === null ? Math.floor(Math.random() * photos.length) : (previous + 1) % photos.length;
-      rememberFrame("sessionStorage", index);
-      rememberFrame("localStorage", index);
+      rememberFrame("sessionStorage", index, "/");
+      rememberFrame("localStorage", index, "/");
     }
     var shown = 0;
     var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -336,8 +363,8 @@
 
     function advance() {
       var next = (index + 1) % photos.length;
-      rememberFrame("sessionStorage", next);
-      rememberFrame("localStorage", next);
+      rememberFrame("sessionStorage", next, "/");
+      rememberFrame("localStorage", next, "/");
       var incoming = shown === 0 ? 1 : 0;
       var outgoing = shown;
       paint(nodes[incoming], photos[next]);
